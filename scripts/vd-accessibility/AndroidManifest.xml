@@ -1,0 +1,6 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="local.codex.vdaccess">
+    <uses-sdk android:minSdkVersion="33" android:targetSdkVersion="36" />
+    <application android:label="VD Accessibility Probe" android:allowBackup="false" />
+    <instrumentation android:name=".Probe" android:targetPackage="local.codex.vdaccess" />
+</manifest>
