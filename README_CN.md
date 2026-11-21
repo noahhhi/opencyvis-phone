@@ -14,6 +14,7 @@
   <a href="https://docs.opencyvis.ai/zh/">文档</a> •
   <a href="README.md">English</a> •
   <a href="#快速开始">快速开始</a> •
+  <a href="scripts/vd-accessibility/">ADB 虚拟屏助手</a> •
   <a href="#路线图">路线图</a> •
   <a href="CONTRIBUTING.md">参与贡献</a>
 </p>
