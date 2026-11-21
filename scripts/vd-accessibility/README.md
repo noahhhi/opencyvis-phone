@@ -4,13 +4,19 @@
 
 ## 构建与运行
 
-使用 JDK 17、Android SDK Platform 36 和 Build Tools 36.0.0。先从本次 scrcpy 的日志确认显示屏 ID，并用 dumpsys activity activities 核实前台任务。以下环境变量由调用方填写。
+构建需要 JDK 17 或 21、Android SDK Platform 36 和 Build Tools 36.0.0。脚本按 `ANDROID_HOME`、`ANDROID_SDK_ROOT`、macOS 的 Android Studio SDK 默认目录和 Apple Silicon 的 Homebrew SDK 默认目录查找 SDK。若 JDK 已通过 Homebrew 安装，可以通过 `JAVA_HOME` 选定版本。
 
 ```sh
-./build.sh "$PWD/probe.apk"
+cd scripts/vd-accessibility
+JAVA_HOME="$(brew --prefix openjdk@21)" ./build.sh /tmp/vd-accessibility.apk
+```
+
+运行前从本次 scrcpy 的日志确认显示屏 ID，并用 `adb shell dumpsys activity activities` 核实前台任务。`serial` 和 `display_id` 由调用方填写。
+
+```sh
 adb -s "$serial" shell pm path local.codex.vdaccess
 # 上一步为空时安装本次构建的辅助包
-adb -s "$serial" install -t --no-incremental probe.apk
+adb -s "$serial" install -t --no-incremental /tmp/vd-accessibility.apk
 adb -s "$serial" shell am instrument -w -e display "$display_id" -e pkg com.openai.chatgpt local.codex.vdaccess/.Probe
 adb -s "$serial" shell am instrument -w -e display "$display_id" -e pkg com.openai.chatgpt -e click Codex local.codex.vdaccess/.Probe
 ```

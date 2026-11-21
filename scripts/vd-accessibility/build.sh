@@ -2,9 +2,22 @@
 set -eu
 src=$(CDPATH='' cd -- "$(dirname -- "$0")" && pwd)
 out=${1:?Usage: build.sh output.apk}
-sdk=${ANDROID_HOME:-/opt/homebrew/share/android-commandlinetools}
+sdk=${ANDROID_HOME:-${ANDROID_SDK_ROOT:-}}
+if [ -z "$sdk" ]; then
+    sdk="$HOME/Library/Android/sdk"
+    if [ ! -f "$sdk/platforms/android-36/android.jar" ] || [ ! -x "$sdk/build-tools/36.0.0/aapt2" ]; then
+        sdk=/opt/homebrew/share/android-commandlinetools
+    fi
+fi
 bt="$sdk/build-tools/36.0.0"
 jar="$sdk/platforms/android-36/android.jar"
+if [ ! -f "$jar" ] || [ ! -x "$bt/aapt2" ]; then
+    printf '%s\n' 'Set ANDROID_HOME to an SDK with Platform 36 and Build Tools 36.0.0.' >&2
+    exit 1
+fi
+if [ -n "${JAVA_HOME:-}" ]; then
+    export PATH="$JAVA_HOME/bin:$PATH"
+fi
 tmp=$(mktemp -d)
 trap 'rm -rf "$tmp"' EXIT
 mkdir "$tmp/classes"
